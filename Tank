@@ -1,0 +1,47 @@
+Enter file contents here
+package com.gyjava.tankwar.tank;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+public class Tank {
+	
+	public static final int WIDTH = 50;
+	public static final int HEIGHT = 50;
+
+	private int x;
+	private int y;
+	
+	public Tank(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	/**
+	 * 从封装的角度看，坦克自己画自己比较方便
+	 * @param g
+	 */
+	public void draw(Graphics g) {
+		Color c = g.getColor();
+		g.setColor(Color.RED);
+		g.fillOval(x, y, 50, 50);
+		g.setColor(c);
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+}
