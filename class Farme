@@ -1,0 +1,84 @@
+Enter file contents here
+package com.gyjava.tankwar;
+
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class TankClient extends Frame {
+
+	private static final long serialVersionUID = 1L;
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 600;
+	
+	int x = 100;
+	int y = 100;
+	
+	private Image offImage;
+	
+	public void launchFrame() {
+		setBounds(100, 100, WIDTH, HEIGHT);
+		setBackground(Color.GREEN);
+		setResizable(false);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				TankClient.this.setVisible(false);
+				System.exit(0);
+			}
+		});
+		setVisible(true);
+		new Thread(new PaintThread()).start();
+	}
+	@Override
+	public void update(Graphics g) {
+//		super.update(g);
+//		System.out.println("---update()----");
+		if(offImage == null) {
+			offImage = createImage(WIDTH, HEIGHT);
+		}
+		Graphics offg = offImage.getGraphics();
+		Color c = offg.getColor();
+		offg.setColor(Color.GREEN);
+		offg.fillRect(0, 0, WIDTH, HEIGHT);
+		offg.setColor(c);
+		paint(offg);
+		g.drawImage(offImage, 0, 0, null);
+		
+	}
+	@Override
+	public void paint(Graphics g) {
+		//System.out.println("-----paint()-----");
+		//记录画笔初始的颜色状态
+		Color c = g.getColor();
+		g.setColor(Color.RED);
+		g.fillOval(x, y, 50, 50);
+		//要让坦克在x和y方向都移动
+		x += 5;
+		y += 5;
+		//恢复还来的状态
+		g.setColor(c);
+	}
+	
+	private class PaintThread implements Runnable {
+		@Override
+		public void run() {
+			while(true) {
+				TankClient.this.repaint();
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		new TankClient().launchFrame();
+	}
+
+}
